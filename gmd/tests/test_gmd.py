@@ -12,7 +12,7 @@ def data():
     return load_iris(return_X_y=True)
 
 def test_gmd_estimator(data):
-    est = GMD()
+    est = GMD(random_state=1234)
     assert est.alpha == 0.1
     assert est.runs == 100
 

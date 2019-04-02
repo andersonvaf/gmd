@@ -4,7 +4,7 @@ import numpy as np
 import numpy.testing as npt
 
 import gmd as greedy_max_dev
-from ..libgmdc import kstest
+from libgmdc import kstest
 
 class TestGMD(unittest.TestCase):
     """
@@ -14,7 +14,7 @@ class TestGMD(unittest.TestCase):
 
     def test_create_sorted(self):
         unsorted = np.array([[0, 3, 2], [1, 0, 3], [3, 2, 0]])
-        gmd = greedy_max_dev.GMD()
+        gmd = greedy_max_dev.GMD(random_state=1234)
         gmd.fit(unsorted)
         self.assertEqual(gmd._sorted.tolist(), [[0, 1, 2], [1, 2, 0], [2, 0, 1]])
         
@@ -64,7 +64,7 @@ class TestGMD(unittest.TestCase):
         r_slice = r_slice[:,0].astype(np.uint8)
 
         data = pd.read_csv('tests/res/spambase_small.data', index_col=None, header=None).values
-        gmd = greedy_max_dev.GMD(alpha=.1, runs=100).fit(data)
+        gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
 
 
         self.assertAlmostEqual(kstest(r_slice, gmd._sorted[:, 0]), 0.7178874)
@@ -81,8 +81,7 @@ class TestGMD(unittest.TestCase):
                 [12, 14, 17, 17, 55],
                 [13, 16, 20, 20, 56]])
         data = pd.read_csv('tests/res/spambase_small.data', index_col=None, header=None).values
-        gmd = greedy_max_dev.GMD(alpha=.1, runs=100)
-        gmd.fit(data)
+        gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
         npt.assert_array_equal(gmd._sorted[0:10], compare)
 
     def test_avg_deviation_statistics(self):
@@ -103,8 +102,7 @@ class TestGMD(unittest.TestCase):
         comp = pd.read_csv('tests/res/deviations_compare_with_R.csv', index_col=0).values
         data = pd.read_csv('tests/res/dt_uniform.csv', index_col=None).values
 
-        gmd = greedy_max_dev.GMD()
-        gmd.fit(data)
+        gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
         res = gmd._deviation_matrix()
 
         npt.assert_almost_equal(comp, res, decimal=2)
@@ -112,7 +110,7 @@ class TestGMD(unittest.TestCase):
     def test_gmd_1(self):
         data = pd.read_csv('tests/res/dt_uniform.csv', index_col=None).values
 
-        gmd = greedy_max_dev.GMD(alpha=.1, runs=1000)
+        gmd = greedy_max_dev.GMD(alpha=.1, runs=1000, random_state=1234)
         gmd.fit(data)  
         subspaces = gmd._max_deviation_subspaces(9)
         self.assertEqual(subspaces, [9, 8]) # computed with R impl

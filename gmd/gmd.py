@@ -3,6 +3,7 @@ This is a module to be used as a reference for building other modules
 """
 import numpy as np
 from sklearn.base import BaseEstimator
+from sklearn.utils import check_random_state
 from sklearn.utils.validation import check_array, check_is_fitted
 from libgmdc import avg_deviation
 from libgmdc import set_seed
@@ -16,10 +17,13 @@ class GMD(BaseEstimator):
         Determines the slice slice.
     runs : int, default=100
         Number of Monte Carlo iterations
+    random_state : int, default=None
+        Used to seed the C PRNG
     """
-    def __init__(self, alpha=0.1, runs=100):
+    def __init__(self, alpha=0.1, runs=100, random_state=None):
         self.alpha = alpha
         self.runs = runs
+        self.random_state = random_state
 
     def fit(self, X, y=None):
         """Compute the interesting subspaces. The result can be found in `subspaces_`.
@@ -40,7 +44,10 @@ class GMD(BaseEstimator):
         self.is_fitted_ = False
         self.subspaces_ = {}
         self._sorted = None
-        set_seed(1234)
+        if self.random_state is None:
+            set_seed(-1)
+        else:
+            set_seed(self.random_state)
 
         X = check_array(X, ensure_min_samples=2)
 

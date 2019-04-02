@@ -4,17 +4,22 @@
 import cython
 cimport numpy as np
 import numpy
-from libc.math cimport abs
-from libc.math cimport ceil
-from libc.math cimport pow
+from libc.math cimport abs, ceil, pow
 from libc.stdlib cimport rand, srand
 
 ctypedef np.int32_t int32
 ctypedef np.float64_t float64
 ctypedef np.uint8_t uint8
 
+cdef extern from "time.h":
+    long int time(int)
+
 def set_seed(seed):
-    srand(seed)
+    if seed < 0:
+        srand(time(0))
+    else:
+        print(f'Seeding {seed}')
+        srand(seed)
 
 cdef int32 my_sum(uint8[:] view):
     cdef int32 i = 0, acc = 0
