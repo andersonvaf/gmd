@@ -1,3 +1,4 @@
+import os
 import unittest
 import pandas as pd
 import numpy as np
@@ -59,16 +60,18 @@ class TestGMD(unittest.TestCase):
         sort = np.argsort(dist)
         self.assertAlmostEqual(kstest(selection, sort.astype(np.int32)), 0.0)
 
+    @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", "Skipping this test on Travis CI.")
     def test_compare_kstest_with_slice_from_R(self):
-        r_slice = pd.read_csv('gmd/tests/res/slice_from_r_0.71789.csv',header=None).values
+        r_slice = pd.read_csv('tests/res/slice_from_r_0.71789.csv',header=None).values
         r_slice = r_slice[:,0].astype(np.uint8)
 
-        data = pd.read_csv('gmd/tests/res/spambase_small.data', index_col=None, header=None).values
+        data = pd.read_csv('tests/res/spambase_small.data', index_col=None, header=None).values
         gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
 
 
         self.assertAlmostEqual(kstest(r_slice, gmd._sorted[:, 0]), 0.7178874)
 
+    @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", "Skipping this test on Travis CI.")
     def test_sorted_is_the_same_as_in_R(self):
         compare = np.array([[ 0,  3,  3,  3, 10],
                 [ 3,  4,  4,  4, 17],
@@ -80,10 +83,11 @@ class TestGMD(unittest.TestCase):
                 [11, 13, 16, 16, 33],
                 [12, 14, 17, 17, 55],
                 [13, 16, 20, 20, 56]])
-        data = pd.read_csv('gmd/tests/res/spambase_small.data', index_col=None, header=None).values
+        data = pd.read_csv('tests/res/spambase_small.data', index_col=None, header=None).values
         gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
         npt.assert_array_equal(gmd._sorted[0:10], compare)
 
+    @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", "Skipping this test on Travis CI.")
     def test_avg_deviation_statistics(self):
         """
         Compares the output from the R deviation computation to the output of
@@ -99,16 +103,17 @@ class TestGMD(unittest.TestCase):
         write.csv(out, file='tests/res/deviations_compare_with_R.csv')
         write.csv(dt, file='tests/res/dt_uniform.csv')
         """
-        comp = pd.read_csv('gmd/tests/res/deviations_compare_with_R.csv', index_col=0).values
-        data = pd.read_csv('gmd/tests/res/dt_uniform.csv', index_col=None).values
+        comp = pd.read_csv('tests/res/deviations_compare_with_R.csv', index_col=0).values
+        data = pd.read_csv('tests/res/dt_uniform.csv', index_col=None).values
 
         gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
         res = gmd._deviation_matrix()
 
         npt.assert_almost_equal(comp, res, decimal=2)
 
+    @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", "Skipping this test on Travis CI.")
     def test_gmd_1(self):
-        data = pd.read_csv('gmd/tests/res/dt_uniform.csv', index_col=None).values
+        data = pd.read_csv('tests/res/dt_uniform.csv', index_col=None).values
 
         gmd = greedy_max_dev.GMD(alpha=.1, runs=1000, random_state=1234)
         gmd.fit(data)  
