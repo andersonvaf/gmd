@@ -60,10 +60,10 @@ class TestGMD(unittest.TestCase):
         self.assertAlmostEqual(kstest(selection, sort.astype(np.int32)), 0.0)
 
     def test_compare_kstest_with_slice_from_R(self):
-        r_slice = pd.read_csv('tests/res/slice_from_r_0.71789.csv',header=None).values
+        r_slice = pd.read_csv('gmd/tests/res/slice_from_r_0.71789.csv',header=None).values
         r_slice = r_slice[:,0].astype(np.uint8)
 
-        data = pd.read_csv('tests/res/spambase_small.data', index_col=None, header=None).values
+        data = pd.read_csv('gmd/tests/res/spambase_small.data', index_col=None, header=None).values
         gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
 
 
@@ -80,7 +80,7 @@ class TestGMD(unittest.TestCase):
                 [11, 13, 16, 16, 33],
                 [12, 14, 17, 17, 55],
                 [13, 16, 20, 20, 56]])
-        data = pd.read_csv('tests/res/spambase_small.data', index_col=None, header=None).values
+        data = pd.read_csv('gmd/tests/res/spambase_small.data', index_col=None, header=None).values
         gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
         npt.assert_array_equal(gmd._sorted[0:10], compare)
 
@@ -99,8 +99,8 @@ class TestGMD(unittest.TestCase):
         write.csv(out, file='tests/res/deviations_compare_with_R.csv')
         write.csv(dt, file='tests/res/dt_uniform.csv')
         """
-        comp = pd.read_csv('tests/res/deviations_compare_with_R.csv', index_col=0).values
-        data = pd.read_csv('tests/res/dt_uniform.csv', index_col=None).values
+        comp = pd.read_csv('gmd/tests/res/deviations_compare_with_R.csv', index_col=0).values
+        data = pd.read_csv('gmd/tests/res/dt_uniform.csv', index_col=None).values
 
         gmd = greedy_max_dev.GMD(random_state=1234).fit(data)
         res = gmd._deviation_matrix()
@@ -108,7 +108,7 @@ class TestGMD(unittest.TestCase):
         npt.assert_almost_equal(comp, res, decimal=2)
 
     def test_gmd_1(self):
-        data = pd.read_csv('tests/res/dt_uniform.csv', index_col=None).values
+        data = pd.read_csv('gmd/tests/res/dt_uniform.csv', index_col=None).values
 
         gmd = greedy_max_dev.GMD(alpha=.1, runs=1000, random_state=1234)
         gmd.fit(data)  
