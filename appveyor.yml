@@ -21,8 +21,11 @@ install:
   # Add Library/bin directory to fix issue
   # https://github.com/conda/conda/issues/1753
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PATH%"
+  # Hack to skip some tests
+  - "SET TRAVIS=true"
   # install the dependencies
-  - "conda install --yes pip numpy==%NUMPY_VERSION% scipy==%SCIPY_VERSION% scikit-learn==%SKLEARN_VERSION% nose pytest pytest-cov"
+  - "conda install --yes pip numpy==%NUMPY_VERSION% scipy==%SCIPY_VERSION% scikit-learn==%SKLEARN_VERSION% nose pytest pytest-cov pandas"
+  - "conda install --yes -c anaconda cython"
   - pip install codecov
   - pip install .
 

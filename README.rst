@@ -5,8 +5,8 @@
 .. |Travis| image:: https://travis-ci.com/FlopsKa/gmd.svg?branch=master
 .. _Travis: https://travis-ci.com/FlopsKa/gmd
 
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/coy2qqaqr1rnnt5y/branch/master?svg=true
-.. _AppVeyor: https://ci.appveyor.com/project/glemaitre/project-template
+.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/84j8gekk5ob3i28d/branch/master?svg=true
+.. _AppVeyor: https://ci.appveyor.com/project/FlopsKa/gmd/
 
 .. |Codecov| image:: https://codecov.io/gh/scikit-learn-contrib/project-template/branch/master/graph/badge.svg
 .. _Codecov: https://codecov.io/gh/scikit-learn-contrib/project-template
