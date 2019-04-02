@@ -1,5 +1,6 @@
-name: project-template
+name: gmd
 dependencies:
   - numpy
   - scipy
   - scikit-learn
+  - pandas
