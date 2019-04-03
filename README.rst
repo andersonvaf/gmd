@@ -14,8 +14,8 @@
 .. |CircleCI| image:: https://circleci.com/gh/FlopsKa/gmd.svg?style=shield&circle-token=:circle-token
 .. _CircleCI: https://circleci.com/gh/FlopsKa/gmd/tree/master
 
-.. |ReadTheDocs| image:: https://readthedocs.org/projects/sklearn-template/badge/?version=latest
-.. _ReadTheDocs: https://sklearn-template.readthedocs.io/en/latest/?badge=latest
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/gmd/badge/?version=latest
+.. _ReadTheDocs: https://gmd.readthedocs.io/en/latest/?badge=latest
 
 Scikit-learn Greedy Maximum Deviation (GMD) Algorithm
 =====================================================
