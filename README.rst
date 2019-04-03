@@ -36,7 +36,7 @@ from the curse of dimensionality.
 .. _Trittenbach2018: https://link.springer.com/article/10.1007/s41060-018-0137-7
 .. _Keller2012: https://ieeexplore.ieee.org/document/6228154
 
-.. _documentation: https://sklearn-template.readthedocs.io/en/latest/quick_start.html
+.. _documentation: https://gmd.readthedocs.io/en/latest/
 
 Refer to the documentation_ to see usage examples.
 

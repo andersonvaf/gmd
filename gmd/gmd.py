@@ -1,5 +1,5 @@
 """
-This is a module to be used as a reference for building other modules
+This is the scikit-learn compatible gmd module
 """
 import numpy as np
 from sklearn.base import BaseEstimator
@@ -9,18 +9,20 @@ from libgmdc import avg_deviation
 from libgmdc import set_seed
 
 class GMD(BaseEstimator):
-    """GMD Estimator
-
-    Parameters
-    ----------
-    alpha : float, default=0.1
-        Determines the slice slice.
-    runs : int, default=100
-        Number of Monte Carlo iterations
-    random_state : int, default=None
-        Used to seed the C PRNG
+    """GMD Estimator. Used to compute interesting subspaces in a dataset.
     """
     def __init__(self, alpha=0.1, runs=100, random_state=None):
+        """Constructor for the GMD class
+
+        Parameters
+        ----------
+        alpha :: float, default=0.1
+            Determines the slice slice.
+        runs :: int, default=100
+            Number of Monte Carlo iterations
+        random_state :: int, default=None
+            Used to seed the C PRNG
+        """
         self.alpha = alpha
         self.runs = runs
         self.random_state = random_state
@@ -30,14 +32,14 @@ class GMD(BaseEstimator):
 
         Parameters
         ----------
-        X : {array-like, sparse matrix}, shape (n_samples, n_features)
+        X :: {array-like, sparse matrix}, shape (n_samples, n_features)
             The training input samples.
-        y : default=None,
+        y :: default=None,
             Not used in the unsupervised setting.
 
         Returns
         -------
-        self : object
+        self :: object
             Returns self.
         """
         self._deviations = None

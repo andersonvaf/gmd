@@ -2,7 +2,7 @@
 Installation of the package
 ###########################
 
-The package can be installed via `pip`, `conda` or directly from the
+The package can be installed via `pip` or directly from the
 repository.
 
 Install using pip
@@ -13,17 +13,24 @@ Install using pip
     $ pip install gmd
 
 
-Install using conda
--------------------
-
-::
-
-    $ conda install -c conda-forge gmd
-
-
 Install from the repository
 ===========================
 
 ::
 
     $ git clone https://github.com/scikit-learn-contrib/project-template.git
+    $ cd gmd
+    $ pip install .
+
+
+Usage
+#####
+
+After the installation the library can be used like every scikit-learn
+compatible estimator::
+
+    from gmd import gmd
+
+    gmd = GMD()
+    gmd.fit(data)
+    print(gmd.subspaces_)

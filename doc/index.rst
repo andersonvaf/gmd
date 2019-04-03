@@ -16,26 +16,19 @@ from the curse of dimensionality.
 .. _Keller2012: https://ieeexplore.ieee.org/document/6228154
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :hidden:
    :caption: Getting Started
 
    quick_start
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :hidden:
    :caption: Documentation
 
-   user_guide
    api
-
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-   :caption: Tutorial - Examples
-
-   auto_examples/index
+   user_guide
 
 `Getting started <quick_start.html>`_
 -------------------------------------
@@ -51,8 +44,3 @@ An example of narrative documentation.
 -------------------------------
 
 An example of API documentation.
-
-`Examples <auto_examples/index.html>`_
---------------------------------------
-
-A set of examples. It complements the `User Guide <user_guide.html>`_.

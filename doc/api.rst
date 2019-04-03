@@ -1,12 +1,10 @@
 ####################
-project-template API
+GMD API
 ####################
-
-This is an example on how to document the API of your own project.
 
 .. currentmodule:: gmd
 
-Estimator
+GMD
 =========
 
 .. autosummary::
