@@ -11,8 +11,8 @@
 .. |Codecov| image:: https://codecov.io/gh/FlopsKa/gmd/branch/master/graph/badge.svg
 .. _Codecov: https://codecov.io/gh/FlopsKa/gmd
 
-.. |CircleCI| image:: https://circleci.com/gh/scikit-learn-contrib/project-template.svg?style=shield&circle-token=:circle-token
-.. _CircleCI: https://circleci.com/gh/scikit-learn-contrib/project-template/tree/master
+.. |CircleCI| image:: https://circleci.com/gh/FlopsKa/gmd.svg?style=shield&circle-token=:circle-token
+.. _CircleCI: https://circleci.com/gh/FlopsKa/gmd/tree/master
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/sklearn-template/badge/?version=latest
 .. _ReadTheDocs: https://sklearn-template.readthedocs.io/en/latest/?badge=latest
