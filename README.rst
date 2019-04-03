@@ -8,8 +8,8 @@
 .. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/84j8gekk5ob3i28d/branch/master?svg=true
 .. _AppVeyor: https://ci.appveyor.com/project/FlopsKa/gmd/
 
-.. |Codecov| image:: https://codecov.io/gh/scikit-learn-contrib/project-template/branch/master/graph/badge.svg
-.. _Codecov: https://codecov.io/gh/scikit-learn-contrib/project-template
+.. |Codecov| image:: https://codecov.io/gh/FlopsKa/gmd/branch/master/graph/badge.svg
+.. _Codecov: https://codecov.io/gh/FlopsKa/gmd
 
 .. |CircleCI| image:: https://circleci.com/gh/scikit-learn-contrib/project-template.svg?style=shield&circle-token=:circle-token
 .. _CircleCI: https://circleci.com/gh/scikit-learn-contrib/project-template/tree/master
