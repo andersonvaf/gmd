@@ -46,10 +46,7 @@ class GMD(BaseEstimator):
         self.is_fitted_ = False
         self.subspaces_ = {}
         self._sorted = None
-        if self.random_state is None:
-            set_seed(-1)
-        else:
-            set_seed(self.random_state)
+        set_seed(self.random_state)
 
         X = check_array(X, ensure_min_samples=2)
 

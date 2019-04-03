@@ -15,10 +15,9 @@ cdef extern from "time.h":
     long int time(int)
 
 def set_seed(seed):
-    if seed < 0:
+    if seed is None:
         srand(time(0))
     else:
-        print(f'Seeding {seed}')
         srand(seed)
 
 cdef int32 my_sum(uint8[:] view):
