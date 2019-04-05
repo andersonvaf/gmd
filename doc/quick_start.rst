@@ -18,7 +18,7 @@ Install from the repository
 
 ::
 
-    $ git clone https://github.com/scikit-learn-contrib/project-template.git
+    $ git clone https://github.com/flopska/gmd
     $ cd gmd
     $ pip install .
 
