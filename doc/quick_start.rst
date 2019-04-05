@@ -29,7 +29,7 @@ Usage
 After the installation the library can be used like every scikit-learn
 compatible estimator::
 
-    from gmd import gmd
+    from gmd import GMD
 
     gmd = GMD()
     gmd.fit(data)
