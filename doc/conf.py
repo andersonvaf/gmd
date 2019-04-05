@@ -39,7 +39,6 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'numpydoc',
-    'sphinx_gallery.gen_gallery',
 ]
 
 # this is needed for some reason...
@@ -306,12 +305,12 @@ intersphinx_mapping = {
 }
 
 # sphinx-gallery configuration
-sphinx_gallery_conf = {
-    'doc_module': 'gmd',
-    'backreferences_dir': os.path.join('generated'),
-    'reference_url': {
-        'gmd': None}
-}
+#sphinx_gallery_conf = {
+#    'doc_module': 'gmd',
+#    'backreferences_dir': os.path.join('generated'),
+#    'reference_url': {
+#        'gmd': None}
+#}
 
 def setup(app):
     # a copy button to copy snippet of code from the documentation
