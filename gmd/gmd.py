@@ -62,7 +62,7 @@ class GMD(BaseEstimator):
         self.is_fitted_ = True
         return self
 
-    def _avg_devation(self, subspaces, reference_dim):
+    def _avg_deviation(self, subspaces, reference_dim):
         """
         Compute the deviation in a subspace given the reference dimension.
 
@@ -91,7 +91,7 @@ class GMD(BaseEstimator):
             for i in range(cols):
                 for j in range(cols): # TODO: use symmetry
                     if i != j:
-                        res = self._avg_devation([i, j], i)
+                        res = self._avg_deviation([i, j], i)
                         out[i, j] = res
             self._deviations = out
         return self._deviations
@@ -105,7 +105,7 @@ class GMD(BaseEstimator):
         for i in reversed(sorted_indices):
             if i != reference_dimension:
                 subspaces.append(i)
-                tmp = self._avg_devation(subspaces, reference_dimension)
+                tmp = self._avg_deviation(subspaces, reference_dimension)
                 if tmp < current_max:
                     subspaces.pop()
                 else:
