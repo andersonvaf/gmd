@@ -50,17 +50,20 @@ class GMD(BaseEstimator):
 
         X = check_array(X, ensure_min_samples=2)
 
-        res = np.empty_like(X, dtype=np.int32)
-        self._sorted = np.concatenate([X, np.array([range(0, len(X))]).T], axis=1)
-        for i in range(X.shape[1]):
-            self._sorted = self._sorted[self._sorted[:, i].argsort(kind='mergesort')]
-            res[:, i] = self._sorted[:, -1]
-        self._sorted = res.astype(np.int32)
+        self._sorted = self.create_sorted_index(X)
   
         self.subspaces_ = self._interesting_subspaces()
         
         self.is_fitted_ = True
         return self
+    
+    def create_sorted_index(self, X):
+        res = np.empty_like(X, dtype=np.int32)
+        self._sorted = np.concatenate([X, np.array([range(0, len(X))]).T], axis=1)
+        for i in range(X.shape[1]):
+            self._sorted = self._sorted[self._sorted[:, i].argsort(kind='mergesort')]
+            res[:, i] = self._sorted[:, -1]
+        return res.astype(np.int32)
 
     def _avg_deviation(self, subspaces, reference_dim):
         """
