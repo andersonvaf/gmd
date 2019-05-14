@@ -12,11 +12,11 @@ def data():
     return load_iris(return_X_y=True)
 
 def test_gmd_estimator(data):
-    est = GMD(random_state=1234)
+    est = GMD(runs=1000, random_state=1234)
     assert est.alpha == 0.1
-    assert est.runs == 100
+    assert est.runs == 1000
 
     est.fit(*data)
     assert hasattr(est, 'is_fitted_')
 
-    assert_dict_equal(est.subspaces_, {0: [0, 2, 1], 1: [1, 2, 0], 2: [2, 3], 3: [3, 2]})
+    assert_dict_equal(est.subspaces_,  {0: [0, 2, 3], 1: [1, 3, 2], 2: [2, 3], 3: [3, 2]})
