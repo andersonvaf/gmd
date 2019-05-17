@@ -6,6 +6,7 @@ cimport numpy as np
 import numpy
 from libc.math cimport abs, ceil, pow
 from libc.stdlib cimport rand, srand
+from libc.limits cimport INT_MAX
 
 ctypedef np.int32_t int32
 ctypedef np.float64_t float64
@@ -54,6 +55,41 @@ cpdef float64 kstest(uint8[:] view, int32[:] sorted_index):
         if current_diff > max_dist:
             max_dist = current_diff
     return max_dist
+
+cpdef (float64, int32) kstest_oldest(uint8[:] view, int32[:] sorted_index):
+    """
+    Compute the Kolmogorov-Smirnov statistic on 2 samples. Assumes no ties.
+
+    Parameters
+    ----------
+    view : 1-D array
+        view is a logical array specifying the samples to include
+    sorted_index : 1-D array
+        the sorted Index
+
+    Returns
+    -------
+    statistic : float
+    """
+    cdef float64 cum_dist = 0.0
+    cdef float64 max_dist = 0.0
+    cdef int32 remaining = my_sum(view)
+    cdef int32 total = sorted_index.shape[0]
+
+    cdef int32 smallest_contained_index = INT_MAX
+
+    cdef int32 i = 0
+    for i in range(total):
+        if view[sorted_index[i]]:
+            cum_dist += 1.0/remaining
+
+            if sorted_index[i] < smallest_contained_index: # find the smallest index in the slice
+                smallest_contained_index = sorted_index[i]
+
+        current_diff = abs(((i + 1.0)/total) - cum_dist)
+        if current_diff > max_dist:
+            max_dist = current_diff
+    return max_dist, smallest_contained_index
 
 cdef subspace_slice(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha):
     """
