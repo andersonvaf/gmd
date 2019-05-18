@@ -76,7 +76,8 @@ cpdef (float64, int32) kstest_oldest(uint8[:] view, int32[:] sorted_index):
     cdef int32 remaining = my_sum(view)
     cdef int32 total = sorted_index.shape[0]
 
-    cdef int32 smallest_contained_index = INT_MAX
+    # cdef int32 smallest_contained_index = INT_MAX
+    cdef int32 smallest_contained_index = len(sorted_index) # use the id of the newest element
 
     cdef int32 i = 0
     for i in range(total):
@@ -91,7 +92,7 @@ cpdef (float64, int32) kstest_oldest(uint8[:] view, int32[:] sorted_index):
             max_dist = current_diff
     return max_dist, smallest_contained_index
 
-cdef subspace_slice(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha):
+cpdef subspace_slice(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha):
     """
     Cuts a hypercube out of the full space and returns the contained data points.
 
@@ -118,6 +119,7 @@ cdef subspace_slice(int32[:,:] sorted_index, int32[:] subspaces, int32 reference
                 selection[sorted_index[j, s]] = 0
             for j in range(r, rows):
                 selection[sorted_index[j, s]] = 0
+            #print(f'subspace: {s}, l: {l}, r: {r}')
     #return numpy.frombuffer(selection, dtype=numpy.uint8)
     return selection
 

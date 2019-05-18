@@ -61,7 +61,7 @@ class GMD(BaseEstimator):
         res = np.empty_like(X, dtype=np.int32)
         self._sorted = np.concatenate([X, np.array([range(0, len(X))]).T], axis=1)
         for i in range(X.shape[1]):
-            self._sorted = self._sorted[self._sorted[:, i].argsort(kind='mergesort')]
+            self._sorted = self._sorted[self._sorted[:, i].argsort(kind='stable')]
             res[:, i] = self._sorted[:, -1]
         return res.astype(np.int32)
 

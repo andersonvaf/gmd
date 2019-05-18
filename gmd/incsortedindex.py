@@ -6,7 +6,8 @@ class IncSortedIndex():
         res = np.zeros((len(start_data),start_data.shape[1],2)) # Zeilen x Spalten x Tupel
         # Sort first window
         for col in range(start_data.shape[1]):
-            res[:,col] = my_sorted[my_sorted[:, col].argsort(kind='mergesort')][:,[col,-1]]
+            my_sorted = my_sorted[my_sorted[:, col].argsort(kind='stable')]
+            res[:,col] = my_sorted[:,[col,-1]]
         self.res = res
         self.window_size = len(res)
         self.col_count = start_data.shape[1]
@@ -32,4 +33,4 @@ class IncSortedIndex():
 
     @property
     def sorted(self):
-        return self.res[:,:,1].astype(int)
+        return self.res[:,:,1].astype(np.int32)
