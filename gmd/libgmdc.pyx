@@ -76,8 +76,8 @@ cpdef (float64, int32) kstest_oldest(uint8[:] view, int32[:] sorted_index):
     cdef int32 remaining = my_sum(view)
     cdef int32 total = sorted_index.shape[0]
 
-    # cdef int32 smallest_contained_index = INT_MAX
-    cdef int32 smallest_contained_index = len(sorted_index) # use the id of the newest element
+    cdef int32 smallest_contained_index = INT_MAX
+    #cdef int32 smallest_contained_index = 0 # use the id of the oldest element
 
     cdef int32 i = 0
     for i in range(total):
@@ -90,6 +90,9 @@ cpdef (float64, int32) kstest_oldest(uint8[:] view, int32[:] sorted_index):
         current_diff = abs(((i + 1.0)/total) - cum_dist)
         if current_diff > max_dist:
             max_dist = current_diff
+    if smallest_contained_index == INT_MAX: # was empty
+        print('empty!')
+        smallest_contained_index = 0
     return max_dist, smallest_contained_index
 
 cpdef subspace_slice(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha):
