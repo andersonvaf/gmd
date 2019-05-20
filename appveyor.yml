@@ -33,6 +33,5 @@ test_script:
   - pytest -v --cov=gmd --pyargs tests/
 
 after_test:
-  - cp .coverage %APPVEYOR_BUILD_FOLDER%
   - cd %APPVEYOR_BUILD_FOLDER%
   - codecov
