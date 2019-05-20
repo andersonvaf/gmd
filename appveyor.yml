@@ -30,9 +30,7 @@ install:
   - pip install .
 
 test_script:
-  - mkdir for_test
-  - cd for_test
-  - pytest -v --cov=gmd --pyargs gmd
+  - pytest -v --cov=gmd --pyargs tests/
 
 after_test:
   - cp .coverage %APPVEYOR_BUILD_FOLDER%
