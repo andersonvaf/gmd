@@ -10,11 +10,6 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
-# get __version__ from _version.py
-ver_file = os.path.join('gmd', '_version.py')
-with open(ver_file) as f:
-    exec(f.read())
-
 DISTNAME = 'gmd'
 DESCRIPTION = 'A scikit-learn compatible python/cython implementation of the GMD algorithm.'
 with codecs.open('README.rst', encoding='utf-8-sig') as f:
@@ -24,7 +19,7 @@ MAINTAINER_EMAIL = 'flops.ka@gmail.com'
 URL = 'https://github.com/FlopsKa/gmd'
 LICENSE = 'MIT'
 DOWNLOAD_URL = 'https://github.com/FlopsKa/gmd'
-VERSION = __version__
+VERSION = '0.0.1'
 INSTALL_REQUIRES = ['numpy', 'scipy', 'scikit-learn']
 CLASSIFIERS = ['Intended Audience :: Science/Research',
                'Intended Audience :: Developers',

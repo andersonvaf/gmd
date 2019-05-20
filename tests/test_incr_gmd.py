@@ -2,8 +2,9 @@ import unittest
 import numpy as np
 import pandas as pd
 
-from gmd import IncSortedIndex, GMD
-from libgmdc import kstest_oldest
+from .context import gmd
+from .context import libgmdc 
+from .context import incsortedindex
 
 
 class TestIncGMD(unittest.TestCase):
@@ -28,7 +29,7 @@ class TestIncGMD(unittest.TestCase):
         unsorted = np.array([[0.1, 1.4, 2.7],
                              [1.2, 1.5, 0.8],
                              [2.3, 3.6, 1.9]])
-        self.sorted_index = IncSortedIndex(unsorted)
+        self.sorted_index = incsortedindex.IncSortedIndex(unsorted)
 
     def test_can_create_sorted(self):
         self.assertListEqual(self.sorted_index.sorted.tolist(), [
@@ -61,14 +62,14 @@ class TestIncGMD(unittest.TestCase):
         window_size = 50
         start_window = df[:window_size]
 
-        sorted_index = IncSortedIndex(start_window)
+        sorted_index = incsortedindex.IncSortedIndex(start_window)
         for i in range(window_size, len(df)):
             sorted_index.del_and_ins_sorted(df.iloc[i])
 
         # the sorted_index should now equal the data structure we obtain by just
         # sorting the last 100 elements
 
-        reference = GMD().create_sorted_index(df[-window_size:])
+        reference = gmd.GMD().create_sorted_index(df[-window_size:])
         self.assertListEqual(sorted_index.sorted.tolist(), reference.tolist())
 
     def test_initial_sorting_works_with_ties(self):
@@ -77,8 +78,8 @@ class TestIncGMD(unittest.TestCase):
                          [0.06, 0., 0.71, 0., 1.23],
                          [0., 0., 0., 0., 0.63],
                          [0., 0., 0., 0., 0.63]])
-        expected = GMD().create_sorted_index(data)
-        actual = IncSortedIndex(data).sorted
+        expected = gmd.GMD().create_sorted_index(data)
+        actual = incsortedindex.IncSortedIndex(data).sorted
         self.assertListEqual(actual.tolist(), expected.tolist())
 
     def test_ks_test_does_return_oldest_element_in_slice(self):
@@ -87,7 +88,7 @@ class TestIncGMD(unittest.TestCase):
         data = np.array([0.01, 0.21, 0.06, 0.02, 0.03, 0.04,
                          0.05, 0.07, 0.15, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13])
         sortedIndex = np.argsort(data, kind='stable')
-        D, oldest_element = kstest_oldest(view, sortedIndex.astype(np.int32))
+        D, oldest_element = libgmdc.kstest_oldest(view, sortedIndex.astype(np.int32))
         self.assertEqual(oldest_element, 11)
         self.assertAlmostEqual(D, 0.6)
 
@@ -97,21 +98,21 @@ class TestIncGMD(unittest.TestCase):
         data = np.array([0.01, 0.21, 0.06, 0.02, 0.03, 0.04,
                          0.05, 0.07, 0.15, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13])
         sortedIndex = np.argsort(data, kind='stable')
-        D, oldest_element = kstest_oldest(view, sortedIndex.astype(np.int32))
+        D, oldest_element = libgmdc.kstest_oldest(view, sortedIndex.astype(np.int32))
         self.assertEqual(oldest_element, 0)
 
     def test_ks_test_does_return_oldest_element_in_slice2(self):
         view = np.array([False, True, True], dtype=np.uint8)
         data = np.array([.1, .2, .3])
         sortedIndex = np.argsort(data, kind='stable')
-        D, oldest_element = kstest_oldest(view, sortedIndex.astype(np.int32))
+        D, oldest_element = libgmdc.kstest_oldest(view, sortedIndex.astype(np.int32))
         self.assertEqual(oldest_element, 1)
 
     def test_ks_test_does_return_oldest_element_in_slice3(self):
         view = np.array([False, False, True], dtype=np.uint8)
         data = np.array([.1, .2, .3])
         sortedIndex = np.argsort(data, kind='stable')
-        D, oldest_element = kstest_oldest(view, sortedIndex.astype(np.int32))
+        D, oldest_element = libgmdc.kstest_oldest(view, sortedIndex.astype(np.int32))
         self.assertEqual(oldest_element, 2)
 
 

@@ -1,5 +1,10 @@
-Greedy Maximum Deviation
-========================
+.. StreamGMD documentation master file, created by
+   sphinx-quickstart on Mon May 20 20:04:41 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to StreamGMD's documentation!
+=====================================
 
 This project provides a scikit-learn compatible python implementation of the
 algorithm presented in [`Trittenbach2018`_] together with some usage examples
@@ -16,31 +21,9 @@ from the curse of dimensionality.
 .. _Keller2012: https://ieeexplore.ieee.org/document/6228154
 
 .. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Getting Started
+   :maxdepth: 2
+   :caption: Contents:
 
    quick_start
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Documentation
-
-   api
    user_guide
 
-`Getting started <quick_start.html>`_
--------------------------------------
-
-Information regarding this template and how to modify it for your own project.
-
-`User Guide <user_guide.html>`_
--------------------------------
-
-An example of narrative documentation.
-
-`API Documentation <api.html>`_
--------------------------------
-
-An example of API documentation.

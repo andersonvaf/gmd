@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.utils.testing import assert_dict_equal
 
-from gmd import GMD
+from .context import gmd
 
 
 @pytest.fixture
@@ -12,7 +12,7 @@ def data():
     return load_iris(return_X_y=True)
 
 def test_gmd_estimator(data):
-    est = GMD(runs=1000, random_state=1234)
+    est = gmd.GMD(runs=1000, random_state=1234)
     assert est.alpha == 0.1
     assert est.runs == 1000
 
