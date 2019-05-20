@@ -87,7 +87,7 @@ class TestIncGMD(unittest.TestCase):
                          False, False, False, True, False, True, False], dtype=np.uint8)
         data = np.array([0.01, 0.21, 0.06, 0.02, 0.03, 0.04,
                          0.05, 0.07, 0.15, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13])
-        sortedIndex = np.argsort(data, kind='stable')
+        sortedIndex = np.argsort(data, kind='mergesort')
         D, oldest_element = libgmdc.kstest_oldest(view, sortedIndex.astype(np.int32))
         self.assertEqual(oldest_element, 11)
         self.assertAlmostEqual(D, 0.6)
@@ -97,21 +97,21 @@ class TestIncGMD(unittest.TestCase):
                          True, True, True, True, True, True, True], dtype=np.uint8)
         data = np.array([0.01, 0.21, 0.06, 0.02, 0.03, 0.04,
                          0.05, 0.07, 0.15, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13])
-        sortedIndex = np.argsort(data, kind='stable')
+        sortedIndex = np.argsort(data, kind='mergesort')
         D, oldest_element = libgmdc.kstest_oldest(view, sortedIndex.astype(np.int32))
         self.assertEqual(oldest_element, 0)
 
     def test_ks_test_does_return_oldest_element_in_slice2(self):
         view = np.array([False, True, True], dtype=np.uint8)
         data = np.array([.1, .2, .3])
-        sortedIndex = np.argsort(data, kind='stable')
+        sortedIndex = np.argsort(data, kind='mergesort')
         D, oldest_element = libgmdc.kstest_oldest(view, sortedIndex.astype(np.int32))
         self.assertEqual(oldest_element, 1)
 
     def test_ks_test_does_return_oldest_element_in_slice3(self):
         view = np.array([False, False, True], dtype=np.uint8)
         data = np.array([.1, .2, .3])
-        sortedIndex = np.argsort(data, kind='stable')
+        sortedIndex = np.argsort(data, kind='mergesort')
         D, oldest_element = libgmdc.kstest_oldest(view, sortedIndex.astype(np.int32))
         self.assertEqual(oldest_element, 2)
 

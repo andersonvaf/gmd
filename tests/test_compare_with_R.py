@@ -27,7 +27,7 @@ class TestGMD(unittest.TestCase):
         """
         view = np.array([False, False, False, False, False, False, False, False, False, False, False, True, False, True, False], dtype=np.uint8)
         data = np.array([0.00, 0.21, 0.06, 0.00, 0.00, 0.00, 0.00, 0.00, 0.15, 0.06, 0.00, 0.00, 0.00, 0.00, 0.00])
-        sortedIndex = np.argsort(data,kind='stable')
+        sortedIndex = np.argsort(data,kind='mergesort')
         D = libgmdc.kstest(view,sortedIndex.astype(np.int32))
         self.assertAlmostEqual(D, 0.466666666666667)
 
@@ -38,7 +38,7 @@ class TestGMD(unittest.TestCase):
         """
         view = np.array([False, False, False, False, False, False, False, False, False, False, False, True, False, True, False], dtype=np.uint8)
         data = np.array([0.01, 0.21, 0.06, 0.02, 0.03, 0.04, 0.05, 0.07, 0.15, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13])
-        sortedIndex = np.argsort(data,kind='stable')
+        sortedIndex = np.argsort(data,kind='mergesort')
         D = libgmdc.kstest(view,sortedIndex.astype(np.int32))
         self.assertAlmostEqual(D, 0.6)
 
