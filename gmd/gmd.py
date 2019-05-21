@@ -8,9 +8,11 @@ from sklearn.utils.validation import check_array, check_is_fitted
 from libgmdc import avg_deviation
 from libgmdc import set_seed
 
+
 class GMD(BaseEstimator):
     """GMD Estimator. Used to compute interesting subspaces in a dataset.
     """
+
     def __init__(self, alpha=0.1, runs=100, random_state=None):
         """Constructor for the GMD class
 
@@ -51,17 +53,19 @@ class GMD(BaseEstimator):
         X = check_array(X, ensure_min_samples=2)
 
         self._sorted = self.create_sorted_index(X)
-  
+
         self.subspaces_ = self._interesting_subspaces()
-        
+
         self.is_fitted_ = True
         return self
-    
+
     def create_sorted_index(self, X):
         res = np.empty_like(X, dtype=np.int32)
-        self._sorted = np.concatenate([X, np.array([range(0, len(X))]).T], axis=1)
+        self._sorted = np.concatenate(
+            [X, np.array([range(0, len(X))]).T], axis=1)
         for i in range(X.shape[1]):
-            self._sorted = self._sorted[self._sorted[:, i].argsort(kind='mergesort')]
+            self._sorted = self._sorted[self._sorted[:, i].argsort(
+                kind='mergesort')]
             res[:, i] = self._sorted[:, -1]
         return res.astype(np.int32)
 
@@ -92,17 +96,18 @@ class GMD(BaseEstimator):
             cols = self._sorted.shape[1]
             out = np.zeros((cols, cols))
             for i in range(cols):
-                for j in range(cols): # TODO: use symmetry
+                for j in range(cols):  # TODO: use symmetry
                     if i != j:
                         res = self._avg_deviation([i, j], i)
                         out[i, j] = res
             self._deviations = out
         return self._deviations
-    
+
     def _max_deviation_subspaces(self, reference_dimension):
         subspaces = []
-        deviations = self._deviation_matrix() # TODO: only use vector here
-        sorted_indices = np.argsort(deviations[reference_dimension]) # highest is last
+        deviations = self._deviation_matrix()  # TODO: only use vector here
+        sorted_indices = np.argsort(
+            deviations[reference_dimension])  # highest is last
         current_max = -1
         subspaces.append(reference_dimension)
         for i in reversed(sorted_indices):
@@ -114,7 +119,7 @@ class GMD(BaseEstimator):
                 else:
                     current_max = tmp
         return subspaces
-    
+
     def _interesting_subspaces(self):
         res = {}
         for i in range(self._sorted.shape[1]):
