@@ -61,11 +61,9 @@ class GMD(BaseEstimator):
 
     def create_sorted_index(self, X):
         res = np.empty_like(X, dtype=np.int32)
-        self._sorted = np.concatenate(
-            [X, np.array([range(0, len(X))]).T], axis=1)
+        self._sorted = np.concatenate([X, np.array([range(0, len(X))]).T], axis=1)
         for i in range(X.shape[1]):
-            self._sorted = self._sorted[self._sorted[:, i].argsort(
-                kind='mergesort')]
+            self._sorted = self._sorted[self._sorted[:, i].argsort(kind="mergesort")]
             res[:, i] = self._sorted[:, -1]
         return res.astype(np.int32)
 
@@ -82,7 +80,13 @@ class GMD(BaseEstimator):
         -------
         float with the deviation of the subspaces wrt. the reference_dim
         """
-        return avg_deviation(self._sorted, np.array(subspaces, dtype=np.int32), reference_dim, self.alpha, self.runs)
+        return avg_deviation(
+            self._sorted,
+            np.array(subspaces, dtype=np.int32),
+            reference_dim,
+            self.alpha,
+            self.runs,
+        )
 
     def _deviation_matrix(self):
         """
@@ -106,8 +110,7 @@ class GMD(BaseEstimator):
     def _max_deviation_subspaces(self, reference_dimension):
         subspaces = []
         deviations = self._deviation_matrix()  # TODO: only use vector here
-        sorted_indices = np.argsort(
-            deviations[reference_dimension])  # highest is last
+        sorted_indices = np.argsort(deviations[reference_dimension])  # highest is last
         current_max = -1
         subspaces.append(reference_dimension)
         for i in reversed(sorted_indices):

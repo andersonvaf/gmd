@@ -18,7 +18,8 @@ def test_gmd_estimator(data):
     assert est.runs == 1000
 
     est.fit(*data)
-    assert hasattr(est, 'is_fitted_')
+    assert hasattr(est, "is_fitted_")
 
-    assert_dict_equal(est.subspaces_,  {0: [0, 2, 3], 1: [
-                      1, 3, 2], 2: [2, 3], 3: [3, 2]})
+    assert_dict_equal(
+        est.subspaces_, {0: [0, 2, 3], 1: [1, 3, 2], 2: [2, 3], 3: [3, 2]}
+    )
