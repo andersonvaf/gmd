@@ -18,10 +18,12 @@ class IncSortedIndex:
 
     def del_and_ins_sorted(self, new_value):
         for col in range(self.col_count):
-            delete_idx = np.argmin(self.res[:, col, 1])  # search in indexes
+            # search in indexes:
+            delete_idx = np.argmin(self.res[:, col, 1]) 
+            # search in values:
             insert_idx = np.searchsorted(
                 self.res[:, col, 0], new_value[col]
-            )  # search in values
+            )  
 
             if delete_idx == insert_idx:
                 self.res[insert_idx, col] = [new_value[col], self.window_size]
