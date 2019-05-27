@@ -172,7 +172,6 @@ class TestGMD(unittest.TestCase):
             "tests/res/spambase_small.data", index_col=None, header=None
         ).values
         greedy = GMD(random_state=1234).fit(data)
-        print(greedy._sorted[0:10])
         npt.assert_array_equal(greedy._sorted[0:10], compare)
 
     @unittest.skipIf(
@@ -199,7 +198,6 @@ class TestGMD(unittest.TestCase):
         data = pd.read_csv(
             "tests/res/spambase_small.data", index_col=None, header=None
         ).values
-        print(data)
         greedy = GMD(runs=1000, random_state=1234).fit(data)
         res = greedy._deviation_matrix()
 

@@ -122,9 +122,43 @@ cpdef subspace_slice(int32[:,:] sorted_index, int32[:] subspaces, int32 referenc
                 selection[sorted_index[j, s]] = 0
             for j in range(r, rows):
                 selection[sorted_index[j, s]] = 0
+    return selection
+
+cpdef subspace_slice_oldest(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha):
+    """
+    Cuts a hypercube out of the full space and returns the contained data points.
+
+    Parameters
+    ----------
+    subspaces : orthogonal projections defining the constraints of the hypercube
+    reference_dim : the unconstrained projection
+
+    Returns
+    -------
+    1-D array with the length of the object count. If 1 the object is in the cube, if 0 it isn't
+    """
+    cdef int32 rows = sorted_index.shape[0]
+    cdef int32 slice_size = <int>ceil(rows * (pow(alpha, (1.0/(len(subspaces)-1)))))
+    cdef uint8[:] selection = numpy.ones(rows, dtype=numpy.uint8)
+    cdef int32 s, l, r, j, i
+    cdef int32 smallest_contained_index = INT_MAX
+    for i in range(len(subspaces)):
+        s = subspaces[i]
+        if s != reference_dim:
+            #l = numpy.random.randint(0, self.rows - slice_size)
+            l = rand() % (rows - slice_size)
+            r = l + slice_size
+            for j in range(0, l):
+                selection[sorted_index[j, s]] = 0
+            for j in range(r, rows):
+                selection[sorted_index[j, s]] = 0
+            for j in range(l+1, r+1):
+                if sorted_index[j, s] < smallest_contained_index:
+                    smallest_contained_index = sorted_index[j, s]
+            
             #print(f'subspace: {s}, l: {l}, r: {r}')
     #return numpy.frombuffer(selection, dtype=numpy.uint8)
-    return selection
+    return selection, smallest_contained_index
 
 cpdef avg_deviation(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha, int32 runs):
         """
@@ -143,6 +177,6 @@ cpdef avg_deviation(int32[:,:] sorted_index, int32[:] subspaces, int32 reference
         cdef uint8[:] my_slice
         cdef int32[:] ref = sorted_index[:, reference_dim]
         for _ in range(runs):
-            my_slice = subspace_slice(sorted_index, subspaces, reference_dim, alpha)
+            my_slice, _ = subspace_slice_oldest(sorted_index, subspaces, reference_dim, alpha)
             result = result + kstest(my_slice, ref)
         return result/runs
