@@ -56,45 +56,6 @@ cpdef float64 kstest(uint8[:] view, int32[:] sorted_index):
             max_dist = current_diff
     return max_dist
 
-cpdef (float64, int32) kstest_oldest(uint8[:] view, int32[:] sorted_index):
-    """
-    Compute the Kolmogorov-Smirnov statistic on 2 samples. Assumes no ties.
-
-    Parameters
-    ----------
-    view : 1-D array
-        view is a logical array specifying the samples to include
-    sorted_index : 1-D array
-        the sorted Index
-
-    Returns
-    -------
-    statistic : float
-    """
-    cdef float64 cum_dist = 0.0
-    cdef float64 max_dist = 0.0
-    cdef int32 remaining = my_sum(view)
-    cdef int32 total = sorted_index.shape[0]
-
-    cdef int32 smallest_contained_index = INT_MAX
-    #cdef int32 smallest_contained_index = 0 # use the id of the oldest element
-
-    cdef int32 i = 0
-    for i in range(total):
-        if view[sorted_index[i]]:
-            cum_dist += 1.0/remaining
-
-            if sorted_index[i] < smallest_contained_index: # find the smallest index in the slice
-                smallest_contained_index = sorted_index[i]
-
-        current_diff = abs(((i + 1.0)/total) - cum_dist)
-        if current_diff > max_dist:
-            max_dist = current_diff
-    if smallest_contained_index == INT_MAX: # was empty
-        print('empty!')
-        smallest_contained_index = 0
-    return max_dist, smallest_contained_index
-
 cpdef subspace_slice(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha):
     """
     Cuts a hypercube out of the full space and returns the contained data points.
@@ -108,21 +69,7 @@ cpdef subspace_slice(int32[:,:] sorted_index, int32[:] subspaces, int32 referenc
     -------
     1-D array with the length of the object count. If 1 the object is in the cube, if 0 it isn't
     """
-    cdef int32 rows = sorted_index.shape[0]
-    cdef int32 slice_size = <int>ceil(rows * (pow(alpha, (1.0/(len(subspaces)-1)))))
-    cdef uint8[:] selection = numpy.ones(rows, dtype=numpy.uint8)
-    cdef int32 s, l, r, j, i
-    for i in range(len(subspaces)):
-        s = subspaces[i]
-        if s != reference_dim:
-            #l = numpy.random.randint(0, self.rows - slice_size)
-            l = rand() % (rows - slice_size)
-            r = l + slice_size
-            for j in range(0, l):
-                selection[sorted_index[j, s]] = 0
-            for j in range(r, rows):
-                selection[sorted_index[j, s]] = 0
-    return selection
+    return subspace_slice_oldest(sorted_index, subspaces, reference_dim, alpha)[0]
 
 cpdef subspace_slice_oldest(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha):
     """
@@ -145,19 +92,18 @@ cpdef subspace_slice_oldest(int32[:,:] sorted_index, int32[:] subspaces, int32 r
     for i in range(len(subspaces)):
         s = subspaces[i]
         if s != reference_dim:
-            #l = numpy.random.randint(0, self.rows - slice_size)
             l = rand() % (rows - slice_size)
             r = l + slice_size
             for j in range(0, l):
                 selection[sorted_index[j, s]] = 0
             for j in range(r, rows):
                 selection[sorted_index[j, s]] = 0
+
+            # find the oldest index in the current slice
+            # search across all slices (dimension-unaware)
             for j in range(l+1, r+1):
                 if sorted_index[j, s] < smallest_contained_index:
                     smallest_contained_index = sorted_index[j, s]
-            
-            #print(f'subspace: {s}, l: {l}, r: {r}')
-    #return numpy.frombuffer(selection, dtype=numpy.uint8)
     return selection, smallest_contained_index
 
 cpdef avg_deviation(int32[:,:] sorted_index, int32[:] subspaces, int32 reference_dim, float64 alpha, int32 runs):
@@ -177,6 +123,6 @@ cpdef avg_deviation(int32[:,:] sorted_index, int32[:] subspaces, int32 reference
         cdef uint8[:] my_slice
         cdef int32[:] ref = sorted_index[:, reference_dim]
         for _ in range(runs):
-            my_slice, _ = subspace_slice_oldest(sorted_index, subspaces, reference_dim, alpha)
+            my_slice = subspace_slice(sorted_index, subspaces, reference_dim, alpha)
             result = result + kstest(my_slice, ref)
         return result/runs
