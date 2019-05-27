@@ -17,11 +17,11 @@ class IncSubspaceContrast:
 
         self.init_result()
 
-    def insert_and_shift(self, new_point, **args):
+    def insert_and_shift(self, new_point):
         self.sorted_index.del_and_ins_sorted(new_point)
-        return self.shift(new_point, **args)
+        return self.shift(new_point)
 
-    def shift(self, new_point, **args):
+    def shift(self, new_point):
         pass
 
     def init_result(self):
