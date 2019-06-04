@@ -214,7 +214,7 @@ class TestGMD(unittest.TestCase):
 
         greedy = GMD(alpha=0.1, runs=1000, random_state=1234)
         greedy.fit(data)
-        subspaces = greedy._max_deviation_subspaces(4)
+        subspaces, _ = greedy._max_deviation_subspaces(4)
         self.assertEqual(subspaces, [4, 3, 2])  # computed with R impl
 
 

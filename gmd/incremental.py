@@ -1,20 +1,21 @@
+from collections import deque
 import numpy as np
 from libgmdc import subspace_slice, set_seed, kstest, subspace_slice_oldest
 from .incsortedindex import IncSortedIndex
 
 
 class IncSubspaceContrast:
-    def __init__(self, data, subspace, ref_dim, alpha=0.1, seed=1234):
+    def __init__(self, data, subspace, ref_dim, iterations=100, alpha=0.1, seed=1234):
         self.subspace = subspace
         self.ref_dim = np.int32(ref_dim)
         self.alpha = alpha
-        self.window_size = len(data)
 
         self.sorted_index = IncSortedIndex(data)
 
         self.seed = seed
         set_seed(seed)
 
+        self.iterations = iterations
         self.init_result()
 
     def insert_and_shift(self, new_point):
@@ -25,8 +26,8 @@ class IncSubspaceContrast:
         pass
 
     def init_result(self):
-        self.res = np.zeros((self.window_size, 1))
-        for i in range(self.window_size):
+        self.res = np.zeros((self.iterations, 1))
+        for i in range(self.iterations):
             curr_slice = subspace_slice(
                 self.sorted_index.sorted, self.subspace, self.ref_dim, self.alpha
             )
@@ -34,14 +35,14 @@ class IncSubspaceContrast:
 
 
 class EvictedSubspaceContrast(IncSubspaceContrast):
-    def __init__(self, data, subspace, ref_dim, alpha=0.1, seed=1234):
-        super().__init__(data, subspace, ref_dim, alpha, seed)
+    def __init__(self, data, subspace, ref_dim, iterations=100, alpha=0.1, seed=1234):
+        super().__init__(data, subspace, ref_dim, iterations, alpha, seed)
         self.len_evicted = []
         self.variances = []
 
     def init_result(self):
-        self.res = np.zeros((self.window_size, 2))
-        for i in range(self.window_size):
+        self.res = np.zeros((self.iterations, 2))
+        for i in range(self.iterations):
             curr_slice, oldest = subspace_slice_oldest(
                 self.sorted_index.sorted, self.subspace, self.ref_dim, self.alpha
             )
@@ -67,19 +68,35 @@ class EvictedSubspaceContrast(IncSubspaceContrast):
 
 
 class ReplaceOldestSubspaceContrast(IncSubspaceContrast):
+    def __init__(
+        self, data, subspace, ref_dim, iterations=100, alpha=0.1, seed=1234, k=10
+    ):
+        super().__init__(data, subspace, ref_dim, iterations, alpha, seed)
+        self.k = k
+
     def shift(self, new_point):
-        for i in range(len(self.res) - 1):
-            self.res[i] = self.res[i + 1]
-        curr_slice = subspace_slice(
-            self.sorted_index.sorted, self.subspace, self.ref_dim, self.alpha
-        )
-        self.res[-1] = kstest(curr_slice, self.sorted_index.sorted[:, self.ref_dim])
+        for i in range(self.k):
+            curr_slice = subspace_slice(
+                self.sorted_index.sorted, self.subspace, self.ref_dim, self.alpha
+            )
+            self.res.append(
+                kstest(curr_slice, self.sorted_index.sorted[:, self.ref_dim])
+            )
         return np.mean(self.res)
+
+    def init_result(self):
+        res = np.zeros((self.iterations, 1))
+        for i in range(self.iterations):
+            curr_slice = subspace_slice(
+                self.sorted_index.sorted, self.subspace, self.ref_dim, self.alpha
+            )
+            res[i] = kstest(curr_slice, self.sorted_index.sorted[:, self.ref_dim])
+        self.res = deque(res, self.iterations)
 
 
 class OriginalGMDSubspaceContrast(IncSubspaceContrast):
     def shift(self, new_point):
-        for i in range(self.window_size):
+        for i in range(self.iterations):
             curr_slice = subspace_slice(
                 self.sorted_index.sorted, self.subspace, self.ref_dim, self.alpha
             )
@@ -88,12 +105,14 @@ class OriginalGMDSubspaceContrast(IncSubspaceContrast):
 
 
 class ReplaceRandomSubspaceContrast(IncSubspaceContrast):
-    def __init__(self, data, subspace, ref_dim, alpha=0.1, seed=1234, draws=50):
-        super().__init__(data, subspace, ref_dim, alpha, seed)
+    def __init__(
+        self, data, subspace, ref_dim, iterations=100, alpha=0.1, seed=1234, draws=50
+    ):
+        super().__init__(data, subspace, ref_dim, iterations, alpha, seed)
         self.draws = draws
 
     def shift(self, new_point):
-        to_replace = np.random.randint(0, self.window_size, self.draws)
+        to_replace = np.random.randint(0, self.iterations, self.draws)
         for i in to_replace:
             curr_slice = subspace_slice(
                 self.sorted_index.sorted, self.subspace, self.ref_dim, self.alpha

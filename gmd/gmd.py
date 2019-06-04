@@ -54,7 +54,7 @@ class GMD(BaseEstimator):
 
         self._sorted = self.create_sorted_index(X)
 
-        self.subspaces_ = self._interesting_subspaces()
+        self.subspaces_, self.contrasts_ = self._interesting_subspaces()
 
         self.is_fitted_ = True
         return self
@@ -121,10 +121,11 @@ class GMD(BaseEstimator):
                     subspaces.pop()
                 else:
                     current_max = tmp
-        return subspaces
+        return subspaces, current_max
 
     def _interesting_subspaces(self):
         res = {}
+        contrasts = {}
         for i in range(self._sorted.shape[1]):
-            res[i] = self._max_deviation_subspaces(i)
-        return res
+            res[i], contrasts[i] = self._max_deviation_subspaces(i)
+        return res, contrasts
