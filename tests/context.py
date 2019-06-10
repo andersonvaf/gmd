@@ -5,4 +5,5 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../g
 
 from gmd import *
 from incsortedindex import *
+from evaluation import *
 import libgmdc
